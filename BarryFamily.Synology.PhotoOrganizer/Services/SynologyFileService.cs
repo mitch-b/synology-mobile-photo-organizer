@@ -2,11 +2,6 @@
 using BarryFamily.Synology.PhotoOrganizer.Models.Configuration;
 using Microsoft.Extensions.Options;
 using Synology.Api.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BarryFamily.Synology.PhotoOrganizer.Services
 {
@@ -19,9 +14,11 @@ namespace BarryFamily.Synology.PhotoOrganizer.Services
     internal class SynologyFileService : ISynologyFileService
     {
         private readonly ISynologyClient _synologyClient;
+        private readonly SynologyConnection _synologyConnection;
         public SynologyFileService(IOptions<SynologyConnection> synologyConnectionOptions)
         {
-            _synologyClient = new SynologyClient("");
+            _synologyConnection = synologyConnectionOptions.Value;
+            //_synologyClient = new SynologyClient(_synologyConnection.Host);
         }
         public Task<bool> CreateFolderAsync(string path)
         {

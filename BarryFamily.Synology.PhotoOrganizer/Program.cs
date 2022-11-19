@@ -13,6 +13,8 @@ builder.ConfigureServices(
     {
         services.AddHostedService<PhotoOrganizerWorker>();
         services.AddOptions<SynologyConnection>();
+        services.AddScoped<ISynologyFileService, SynologyFileService>();
+        services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<ITokenizedFilePathService, TokenizedFilePathService>();
     });
 

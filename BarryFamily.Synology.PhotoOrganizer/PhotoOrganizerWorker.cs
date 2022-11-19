@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using BarryFamily.Synology.PhotoOrganizer.Services;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace BarryFamily.Synology.PhotoOrganizer
@@ -6,9 +7,11 @@ namespace BarryFamily.Synology.PhotoOrganizer
     internal class PhotoOrganizerWorker : IHostedService
     {
         private readonly ILogger<PhotoOrganizerWorker> _logger;
-        public PhotoOrganizerWorker(ILoggerFactory loggerFactory)
+        private readonly IPhotoService _photoService;
+        public PhotoOrganizerWorker(ILoggerFactory loggerFactory, IPhotoService photoService)
         {
             _logger = loggerFactory.CreateLogger<PhotoOrganizerWorker>();
+            _photoService = photoService;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -17,9 +20,9 @@ namespace BarryFamily.Synology.PhotoOrganizer
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                _logger.LogInformation($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()} {nameof(PhotoOrganizerWorker)}: Checking for photos to organize");
-                // var unorganizedPhotos = await photoService.GetUnorganizedPhotosAsync();
-                // var result = await organizerService.MovePhotosAsync(unorganizedPhotos);
+                _logger.LogInformation($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}: Checking for photos to organize");
+                // var unorganizedPhotos = await _photoService.GetUnorganizedPhotosAsync();
+                // var result = await _photoService.MovePhotosAsync(unorganizedPhotos);
                 await Task.Delay(5000);
             }
         }
