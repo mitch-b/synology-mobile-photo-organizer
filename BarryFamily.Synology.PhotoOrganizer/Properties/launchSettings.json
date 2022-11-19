@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "BarryFamily.Synology.PhotoOrganizer": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
