@@ -1,4 +1,6 @@
 ﻿using BarryFamily.Synology.PhotoOrganizer.Models;
+using BarryFamily.Synology.PhotoOrganizer.Models.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace BarryFamily.Synology.PhotoOrganizer.Services
 {
@@ -7,22 +9,40 @@ namespace BarryFamily.Synology.PhotoOrganizer.Services
         Task<IEnumerable<SynoFile>> GetUnorganizedPhotosAsync();
         Task<bool> OrganizePhotoAsync(SynoFile file);
     }
+
     internal class PhotoService : IPhotoService
     {
+        private readonly OrganizeInfo _organizeInfo;
         private readonly ISynologyFileService _synologyFileService;
-        public PhotoService(ISynologyFileService synologyFileService) 
+        private readonly ITokenizedFilePathService _tokoenizedFilePathService;
+
+        public PhotoService(
+            IOptions<OrganizeInfo> organizeInfoOptions,
+            ISynologyFileService synologyFileService,
+            ITokenizedFilePathService tokenizedFilePathService) 
         {
+            _organizeInfo = organizeInfoOptions.Value;
             _synologyFileService = synologyFileService;
+            _tokoenizedFilePathService = tokenizedFilePathService;
         }
 
-        public Task<IEnumerable<SynoFile>> GetUnorganizedPhotosAsync()
+        public async Task<IEnumerable<SynoFile>> GetUnorganizedPhotosAsync()
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(_organizeInfo.MobileUploadPath))
+            {
+                throw new Exception(
+                    $"Expected a value in appsettings for {nameof(OrganizeInfo)}.{nameof(OrganizeInfo.MobileUploadPath)}");
+            }
+            return await _synologyFileService.GetFilesAsync(_organizeInfo.MobileUploadPath!);
         }
 
-        public Task<bool> OrganizePhotoAsync(SynoFile file)
+        public async Task<bool> OrganizePhotoAsync(SynoFile file)
         {
-            throw new NotImplementedException();
+            await _synologyFileService.CreateFolderAsync(file.Path);
+            var filePath = $"{file.Path}/{file.Name}";
+            var destinationPath = _tokoenizedFilePathService
+                .GetTokenizedFilePath(_organizeInfo.DestinationPath, file);
+            return await _synologyFileService.MoveFileAsync(filePath, destinationPath);
         }
     }
 }

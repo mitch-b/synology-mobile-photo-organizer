@@ -2,5 +2,7 @@
 {
     internal class OrganizeInfo
     {
+        public string? MobileUploadPath { get; set; }
+        public string? DestinationPath { get; set; }
     }
 }
