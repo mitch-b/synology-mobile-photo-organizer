@@ -14,7 +14,11 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-    <PackageReference Include="Synology.Api.Client" Version="0.1.13" />
+    <PackageReference Include="Synology.Api.ClientAlt" Version="0.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Synology.Api.ClientAlt" />
+  </ItemGroup>
 </Project>
