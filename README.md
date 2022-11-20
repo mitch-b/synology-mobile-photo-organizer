@@ -1,6 +1,6 @@
 # Synology Mobile Photo Organizer
 
-## Use Case
+## Use Case(s)
 
 You are using DS Photo to backup mobile photos to a single folder -
 but would like those organized into dated folders.
@@ -14,7 +14,7 @@ I'm not sure what use case that is.
 
 ## Running
 
-> TODO: provide Docker run instructions without need to clone this repository.
+I've confirmed running in Docker container and as a console application directly. See **Configuring** section for details on setting required connectivity details. 
 
 ## Configuring
 
@@ -28,7 +28,7 @@ version: "3.6"
 services:
   server:
     container_name: synology-mobile-photo-organizer
-    image: ghcr.io/mitch-b/synology-mobile-photo-organizer:latest
+    image: ghcr.io/mitch-b/synology-mobile-photo-organizer:master
     restart: always
     environment:
       - TZ=America/Chicago
