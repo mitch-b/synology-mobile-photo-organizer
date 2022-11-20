@@ -21,8 +21,11 @@ namespace BarryFamily.Synology.PhotoOrganizer
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 _logger.LogInformation($"{DateTime.Now.ToShortDateString()} {DateTime.Now.ToShortTimeString()}: Checking for photos to organize");
-                // var unorganizedPhotos = await _photoService.GetUnorganizedPhotosAsync();
-                // var result = await _photoService.MovePhotosAsync(unorganizedPhotos);
+                var unorganizedPhotos = await _photoService.GetUnorganizedPhotosAsync();
+                foreach (var photo in unorganizedPhotos)
+                {
+                    await _photoService.OrganizePhotoAsync(photo);
+                }
                 await Task.Delay(5000);
             }
         }

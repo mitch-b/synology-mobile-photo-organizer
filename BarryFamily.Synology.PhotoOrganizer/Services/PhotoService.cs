@@ -14,7 +14,7 @@ namespace BarryFamily.Synology.PhotoOrganizer.Services
     {
         private readonly OrganizeInfo _organizeInfo;
         private readonly ISynologyFileService _synologyFileService;
-        private readonly ITokenizedFilePathService _tokoenizedFilePathService;
+        private readonly ITokenizedFilePathService _tokenizedFilePathService;
 
         public PhotoService(
             IOptions<OrganizeInfo> organizeInfoOptions,
@@ -23,7 +23,7 @@ namespace BarryFamily.Synology.PhotoOrganizer.Services
         {
             _organizeInfo = organizeInfoOptions.Value;
             _synologyFileService = synologyFileService;
-            _tokoenizedFilePathService = tokenizedFilePathService;
+            _tokenizedFilePathService = tokenizedFilePathService;
         }
 
         public async Task<IEnumerable<SynoFile>> GetUnorganizedPhotosAsync()
@@ -33,16 +33,15 @@ namespace BarryFamily.Synology.PhotoOrganizer.Services
                 throw new Exception(
                     $"Expected a value in appsettings for {nameof(OrganizeInfo)}.{nameof(OrganizeInfo.MobileUploadPath)}");
             }
-            return await _synologyFileService.GetFilesAsync(_organizeInfo.MobileUploadPath!);
+            return await _synologyFileService.GetFilesAsync(_organizeInfo.MobileUploadPath!.TrimEnd('/'));
         }
 
         public async Task<bool> OrganizePhotoAsync(SynoFile file)
         {
-            await _synologyFileService.CreateFolderAsync(file.Path);
-            var filePath = $"{file.Path}/{file.Name}";
-            var destinationPath = _tokoenizedFilePathService
-                .GetTokenizedFilePath(_organizeInfo.DestinationPath, file);
-            return await _synologyFileService.MoveFileAsync(filePath, destinationPath);
+            var destinationPath = _tokenizedFilePathService
+                .GetTokenizedFilePath(_organizeInfo.DestinationPath.TrimEnd('/'), file);
+            await _synologyFileService.CreateFolderAsync(destinationPath);
+            return await _synologyFileService.MoveFileAsync(file.Path, destinationPath);
         }
     }
 }

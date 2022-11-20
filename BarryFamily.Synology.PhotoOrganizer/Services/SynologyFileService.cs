@@ -47,7 +47,7 @@ namespace BarryFamily.Synology.PhotoOrganizer.Services
             {
                 Path = f.Path,
                 Name = f.Name,
-                Date = new DateTime((long)f.Additional.Time.Mtime)
+                Date = DateTimeOffset.FromUnixTimeSeconds((long)f.Additional.Time.Mtime).LocalDateTime
             });
         }
 

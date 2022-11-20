@@ -19,7 +19,7 @@ namespace BarryFamily.Synology.PhotoOrganizer.Services
             return filePath
                 .Replace("<year>", file.Date.Year.ToString())
                 .Replace("<month>", file.Date.ToString("MM"))
-                .Replace("<day>", file.Date.ToString("DD"));
+                .Replace("<day>", file.Date.ToString("dd"));
         }
     }
 }
