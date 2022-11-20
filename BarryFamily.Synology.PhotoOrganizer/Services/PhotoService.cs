@@ -19,7 +19,7 @@ namespace BarryFamily.Synology.PhotoOrganizer.Services
         public PhotoService(
             IOptions<OrganizeInfo> organizeInfoOptions,
             ISynologyFileService synologyFileService,
-            ITokenizedFilePathService tokenizedFilePathService) 
+            ITokenizedFilePathService tokenizedFilePathService)
         {
             _organizeInfo = organizeInfoOptions.Value;
             _synologyFileService = synologyFileService;

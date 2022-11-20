@@ -8,6 +8,8 @@ namespace BarryFamily.Synology.PhotoOrganizer
     {
         private readonly ILogger<PhotoOrganizerWorker> _logger;
         private readonly IPhotoService _photoService;
+        private readonly int _checkEverySeconds = 60;
+
         public PhotoOrganizerWorker(ILoggerFactory loggerFactory, IPhotoService photoService)
         {
             _logger = loggerFactory.CreateLogger<PhotoOrganizerWorker>();
@@ -24,9 +26,11 @@ namespace BarryFamily.Synology.PhotoOrganizer
                 var unorganizedPhotos = await _photoService.GetUnorganizedPhotosAsync();
                 foreach (var photo in unorganizedPhotos)
                 {
+                    _logger.LogInformation($"Organizing -- {photo.Name}");
                     await _photoService.OrganizePhotoAsync(photo);
+                    _logger.LogDebug($"{photo.Name} -- Finished!");
                 }
-                await Task.Delay(5000);
+                await Task.Delay(_checkEverySeconds * 1000);
             }
         }
 
