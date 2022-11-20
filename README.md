@@ -28,7 +28,7 @@ version: "3.6"
 services:
   server:
     container_name: synology-mobile-photo-organizer
-    image: ghcr.io/mitch-b/synology-mobile-photo-organizer:master
+    image: ghcr.io/mitch-b/synology-mobile-photo-organizer:latest
     restart: always
     environment:
       - TZ=America/Chicago
